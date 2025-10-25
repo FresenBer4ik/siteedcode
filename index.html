@@ -364,13 +364,11 @@
         <li><a href="#contact">Контакты</a></li>
         <li><a href="/clicker">Кликер</a></li>
         <li><a href="login.html">Вход</a></li>
-
-                <li>
+        <li>
           <a href="https://uploader-f4hn.onrender.com/" target="_blank" rel="noopener noreferrer">
             Отправить
           </a>
         </li>
-        
       </ul>
     </nav>
   </div>
@@ -390,10 +388,11 @@
     <p class="counter">Всего проектов: <span id="projectCount"></span></p>
     <div class="tabs">
       <button class="tab-btn active" data-tab="public">Для всех</button>
-      <button class="tab-btn" data-tab="games">Игры</button>
+      <button class="tab-btn" data-tab="games">ИГРЫ</button>
       <button class="tab-btn" data-tab="secret">Для НЕДОХАКЕРЫ</button>
     </div>
     <div id="public" class="tab-content active"><div class="works-grid"></div></div>
+    <div id="games" class="tab-content"><div class="works-grid"></div></div>
     <div id="secret" class="tab-content"><div class="works-grid"></div></div>
   </div>
 </section>
@@ -448,7 +447,7 @@
   tabBtns.forEach(btn=>{
     btn.addEventListener("click",()=>{
       const tabId=btn.dataset.tab;
-      if(tabId==="secret" && !unlocked){
+      if((tabId==="secret" || tabId==="games") && !unlocked){
         modal.style.display="flex";loginI.value="";passI.value="";error.textContent="";return;
       }
       switchTab(btn,tabId);
@@ -479,19 +478,34 @@
     .then(res=>res.json())
     .then(data=>{
       const publicGrid=document.querySelector("#public .works-grid");
+      const gamesGrid=document.querySelector("#games .works-grid");
       const secretGrid=document.querySelector("#secret .works-grid");
       data.forEach(p=>{
         const card=document.createElement("div");
         card.classList.add("work-card");
+        
+        // Определяем текст кнопки в зависимости от типа
+        let buttonText = "Перейти ➜";
+        if (p.access === "games") buttonText = "🎮 Играть ➜";
+        if (p.access === "secret") buttonText = "Скачать ➜";
+        
         card.innerHTML=`
           <img src="${p.img}" alt="${p.title}" class="work-img">
           <div class="work-info">
             <h3 class="work-title">${p.title}</h3>
             <p class="work-desc">${p.desc}</p>
             ${p.tags.map(tag=>`<span class="tech-tag">${tag}</span>`).join("")}
-            <a href="${p.link}" target="_blank" class="work-link">${p.access==="public"?"Перейти ➜":"Скачать ➜"}</a>
+            <a href="${p.link}" target="_blank" class="work-link">${buttonText}</a>
           </div>`;
-        (p.access==="public"?publicGrid:secretGrid).appendChild(card);
+        
+        // Распределяем по вкладкам
+        if(p.access==="games"){
+          gamesGrid.appendChild(card);
+        }else if(p.access==="secret"){
+          secretGrid.appendChild(card);
+        }else{
+          publicGrid.appendChild(card);
+        }
         observer.observe(card);
       });
       document.getElementById("projectCount").textContent=data.length;
@@ -499,7 +513,3 @@
 </script>
 </body>
 </html>
-
-
-
-

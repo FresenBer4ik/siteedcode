@@ -657,8 +657,8 @@
     let projects = [];
 
     // Настройки
-    const githubJson = "https://raw.githubusercontent.com/FresenBer4ik/FresenBer4ik.github.io/main/projects.json";
-    const repoUrl = "https://github.com/FresenBer4ik/FresenBer4ik.github.io";
+    const githubJson = "https://raw.githubusercontent.com/EdvardCode/siteedcode/main/projects.json";
+    const repoUrl = "https://github.com/EdvardCode/siteedcode";
 
     function openRepo() { 
         window.open(repoUrl, "_blank"); 
@@ -739,7 +739,7 @@
             let accessCell = row.insertCell(1);
             let accessBadge = document.createElement('span');
             accessBadge.className = `status-badge status-${p.access}`;
-            accessBadge.innerText = p.access === 'public' ? 'Публичный' : 'Секретный';
+            accessBadge.innerText = p.access === 'public' ? 'Публичный' : 'Игры' : 'Секретный';
             accessCell.appendChild(accessBadge);
             
             // Теги
